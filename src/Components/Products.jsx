@@ -4,7 +4,7 @@ import { Container, Table } from 'react-bootstrap'
 const Products = ({ authState, products }) => {
 
 
-    if (!authState.isAuthenticated) {
+    if (!authState?.isAuthenticated) {
         return <div>
             <p>Hey there, it looks like you aren't logged in yet.  To log in, click here.</p>
         </div>

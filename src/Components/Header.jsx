@@ -4,11 +4,11 @@ import { Navbar, Nav, Form, Button } from 'react-bootstrap'
 const Header = ({authState, oktaAuth}) => {
 
     
-    if (authState.isPending) {
+    if (authState?.isPending) {
         return <div>Loading...</div>;
     }
 
-    const button = authState.isAuthenticated ?
+    const button = authState?.isAuthenticated ?
         <Button variant="secondary" onClick={() => {  oktaAuth.signOut('/'); }}>Logout</Button> :
         <Button variant="secondary" onClick={() => {  oktaAuth.signInWithRedirect() }}>Login</Button>
 
