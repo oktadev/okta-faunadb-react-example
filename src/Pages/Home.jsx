@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Container } from "react-bootstrap";
-import faunadb from "faunadb";
+import React, { Component } from 'react';
+import { Container } from 'react-bootstrap';
+import faunadb from 'faunadb';
 
-import { withOktaAuth } from "@okta/okta-react";
+import { withOktaAuth } from '@okta/okta-react';
 
-import Header from "../Components/Header";
-import Products from "../Components/Products";
+import Header from '../Components/Header';
+import Products from '../Components/Products';
 
 export default withOktaAuth(
   class Home extends Component {
@@ -27,18 +27,18 @@ export default withOktaAuth(
       });
 
       const client = new faunadb.Client({
-        domain: "db.fauna.com",
+        domain: 'db.fauna.com',
         secret: accessToken,
-        scheme: "https",
+        scheme: 'https',
       });
       const q = faunadb.query;
 
-      const { Documents, Collection } = q;
+      const {Documents, Collection} = q;
 
       client
         .query(
           q.Map(
-            q.Paginate(Documents(Collection("products"))),
+            q.Paginate(Documents(Collection('products'))),
             q.Lambda((x) => q.Get(x))
           )
         )
@@ -86,8 +86,8 @@ export default withOktaAuth(
             products={this.state.products}
           ></Products>
 
-          <footer className="text-muted">
-            <div className="container">
+          <footer className='text-muted'>
+            <div className='container'>
               <p>A Small demo using Okta to authentication calls to FaunaDB</p>
               <p>By Nik Fisher</p>
             </div>
