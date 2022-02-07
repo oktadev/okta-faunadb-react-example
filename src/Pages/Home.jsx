@@ -61,9 +61,9 @@ export default withOktaAuth(
       }
     };
 
-    componentDidUpdate = (prevProps, prevState, snapshot) => {
+    componentDidMount = () => {
       if (
-        this.props.authState.isAuthenticated &&
+        this.props.authState?.isAuthenticated &&
         !this.state.pendingProducts &&
         !this.state.products
       ) {
