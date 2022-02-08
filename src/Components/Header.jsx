@@ -22,7 +22,7 @@ const Header = ({authState, oktaAuth}) => {
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='mr-auto'>
         </Nav>
-        <Form inline>
+        <Form className='d-flex'>
           {button}
         </Form>
       </Navbar.Collapse>

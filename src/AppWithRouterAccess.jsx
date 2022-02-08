@@ -25,7 +25,7 @@ const AppWithRouterAccess = () => {
 
   return (
     <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
-      <Route path='/' exact={true} component={Home}></Route>
+      <Route path='/' exact={true} component={Home}/>
       <Route path='/callback' component={LoginCallback}/>
     </Security>
   );
