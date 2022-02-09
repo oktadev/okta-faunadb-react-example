@@ -1,70 +1,116 @@
-# Getting Started with Create React App
+# Create a Secure Serverless Application with FaunaDB
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository shows you how to integrate [Fauna DB](https://fauna.com/) in a React application secured with Okta.  You will learn how to set up Okta to be an authentication provide and pass the token from Okta to Fauna, which Fauna can use to authenticate your user.  Please read [Create a Secure Serverless Application with FaunaDB][blog] to see how it was created.
 
-## Available Scripts
+**Prerequisites:**
 
-In the project directory, you can run:
+- [Node.js](https://nodejs.org/en/)
+- [Fauna Account](https://fauna.com/)
+- [Okta CLI](https://cli.okta.com)
+> [Okta](https://developer.okta.com/) has Authentication and User Management APIs that reduce development time with instant-on, scalable user infrastructure. Okta's intuitive API and expert support make it easy for developers to authenticate, manage and secure users and roles in any application.
 
-### `npm start`
+* [Getting Started](#getting-started)
+* [Links](#links)
+* [Help](#help)
+* [License](#license)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+To run this example locally, run the following commands:
 
-### `npm test`
+```bash
+git clone https://github.com/nickolasfisher/Okta_FaunaDB.git
+cd Okta_FaunaDB
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Create an OIDC Application in Okta
 
-### `npm run build`
+Create a free developer account with the following command using the [Okta CLI](https://cli.okta.com):
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```shell
+okta register
+```
+If you already have a developer account, use `okta login` to integrate it with the Okta CLI. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Navigate to your Okta Admin Portal.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Click **Security** > **API** and then click **Add Authorization Server**.
 
-### `npm run eject`
+Name your Authorization Service `FaunaDB`, set the audience to `Change Later`, set the description to `Server for Fauna DB`.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Return to the Okta CLI to create a client application in Okta with the following command:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```shell
+okta apps create
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+You will be prompted to select the following options:
+- Type of Application: **1: Web**
+- Framework of Application: **Other**
+- Redirect URI: `https://localhost:3000/authorization-code/callback`
+- Post Logout Redirect URI: `https://localhost:3000`
+- Authorization Server: *Select the Option that has your new FaunaDB Server*
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The application configuration will be printed to `.okta.env`.
 
-## Learn More
+```dotenv
+export OKTA_OAUTH2_ISSUER="{yourOktaDomain}/oauth2/{yourAuthorizationServiceId}"
+export OKTA_OAUTH2_CLIENT_SECRET="{yourClientSecret}"
+export OKTA_OAUTH2_CLIENT_ID="{yourClientId}"
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Create a new file in your project folder called .env.  Copy the values to there
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```dotenv
+REACT_APP_OKTA_CLIENTID={yourClientId}
+REACT_APP_OKTA_URL_BASE={yourOktaDomain}
+REACT_APP_OKTA_AUTHORIZATION_SERVER_ID={yourAuthorizationServiceId}
+REACT_APP_OKTA_APP_BASE_URL=http://localhost:3000
+```
 
-### Code Splitting
+Use `npm run start` to run the application.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Setup FaunaDB
 
-### Analyzing the Bundle Size
+Log in to your Fauna Account
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Click **Create Database**
 
-### Making a Progressive Web App
+Name it *Products*
+Select *Classic* for Region Group
+Select *Use Demo Data*
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Once the database sets up, navigate to the *Security* tab and select the *Providers* tab on the *Security* screen.
 
-### Advanced Configuration
+Click **New Access Provider**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Name the Access Provider *Okta*
+Copy the Audience -> Paste this in the *Audience* Field of your authorization server in Okta
+Retrieve your *Metadata URI* from the Okta authorization server page and paste it in the JWKS endpoint
+Copy your *Issuer* from Okta to FaunaDB
+Under *Select a Role* select *customer*
+Click **Save**
 
-### Deployment
+### Test your Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+In your application use the command `npm run start` to run your application.
 
-### `npm run build` fails to minify
+Login to your Okta account and you should see the list of Products from Fauna
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Links
+
+This example uses the following open source libraries from Okta:
+
+* [Okta with NodeJs](https://developer.okta.com/code/nodejs/)
+* [Okta with React](https://developer.okta.com/code/react/)
+* [Okta CLI](https://github.com/okta/okta-cli)
+
+## Help
+
+Please post any questions as comments on the [blog post][blog], or visit our [Okta Developer Forums](https://devforum.okta.com/).
+
+## License
+
+Apache 2.0, see [LICENSE](LICENSE).
+
+[blog]: https://developer.okta.com/blog/2021/xyz
