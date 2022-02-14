@@ -64,8 +64,8 @@ Create a new file in your project folder called `.env`.  Copy the values to ther
 
 ```dotenv
 REACT_APP_OKTA_CLIENTID={yourClientId}
-REACT_APP_OKTA_URL_BASE={yourOktaDomain}
-REACT_APP_OKTA_AUTHORIZATION_SERVER_ID={yourAuthorizationServiceId}
+REACT_APP_OKTA_URL_BASE=https://{yourOktaDomain}
+REACT_APP_OKTA_AUTHORIZATION_SERVER_ID={yourAuthorizationServerId}
 REACT_APP_OKTA_APP_BASE_URL=http://localhost:3000
 ```
 
