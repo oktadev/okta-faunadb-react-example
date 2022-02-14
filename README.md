@@ -7,6 +7,7 @@ This repository shows you how to integrate [Fauna DB](https://fauna.com/) in a R
 - [Node.js](https://nodejs.org/en/)
 - [Fauna Account](https://fauna.com/)
 - [Okta CLI](https://cli.okta.com)
+
 > [Okta](https://developer.okta.com/) has Authentication and User Management APIs that reduce development time with instant-on, scalable user infrastructure. Okta's intuitive API and expert support make it easy for developers to authenticate, manage and secure users and roles in any application.
 
 * [Getting Started](#getting-started)
@@ -19,8 +20,8 @@ This repository shows you how to integrate [Fauna DB](https://fauna.com/) in a R
 To run this example locally, run the following commands:
 
 ```bash
-git clone https://github.com/nickolasfisher/Okta_FaunaDB.git
-cd Okta_FaunaDB
+git clone https://github.com/oktadev/okta-faunadb-react-example.git faunadb-react
+cd faunadb-react
 ```
 
 ### Create an OIDC Application in Okta
@@ -47,19 +48,19 @@ okta apps create
 You will be prompted to select the following options:
 - Type of Application: **1: Web**
 - Framework of Application: **Other**
-- Redirect URI: `https://localhost:3000/authorization-code/callback`
+- Redirect URI: `https://localhost:3000/callback`
 - Post Logout Redirect URI: `https://localhost:3000`
 - Authorization Server: *Select the Option that has your new FaunaDB Server*
 
 The application configuration will be printed to `.okta.env`.
 
 ```dotenv
-export OKTA_OAUTH2_ISSUER="{yourOktaDomain}/oauth2/{yourAuthorizationServiceId}"
+export OKTA_OAUTH2_ISSUER="https://{yourOktaDomain}/oauth2/{yourAuthorizationServiceId}"
 export OKTA_OAUTH2_CLIENT_SECRET="{yourClientSecret}"
 export OKTA_OAUTH2_CLIENT_ID="{yourClientId}"
 ```
 
-Create a new file in your project folder called .env.  Copy the values to there
+Create a new file in your project folder called `.env`.  Copy the values to there:
 
 ```dotenv
 REACT_APP_OKTA_CLIENTID={yourClientId}
@@ -82,14 +83,13 @@ Select *Use Demo Data*
 
 Once the database sets up, navigate to the *Security* tab and select the *Providers* tab on the *Security* screen.
 
-Click **New Access Provider**
-
-Name the Access Provider *Okta*
-Copy the Audience -> Paste this in the *Audience* Field of your authorization server in Okta
-Retrieve your *Metadata URI* from the Okta authorization server page and paste it in the JWKS endpoint
-Copy your *Issuer* from Okta to FaunaDB
-Under *Select a Role* select *customer*
-Click **Save**
+- Click **New Access Provider**
+- Name the Access Provider *Okta*
+- Copy the Audience -> Paste this in the *Audience* Field of your authorization server in Okta
+- Retrieve your *Metadata URI* from the Okta authorization server page and paste it in the JWKS endpoint
+- Copy your *Issuer* from Okta to FaunaDB
+- Under *Select a Role* select *customer*
+- Click **Save**
 
 ### Test your Application
 
@@ -101,7 +101,6 @@ Login to your Okta account and you should see the list of Products from Fauna
 
 This example uses the following open source libraries from Okta:
 
-* [Okta with NodeJs](https://developer.okta.com/code/nodejs/)
 * [Okta with React](https://developer.okta.com/code/react/)
 * [Okta CLI](https://github.com/okta/okta-cli)
 
@@ -113,4 +112,4 @@ Please post any questions as comments on the [blog post][blog], or visit our [Ok
 
 Apache 2.0, see [LICENSE](LICENSE).
 
-[blog]: https://developer.okta.com/blog/2021/xyz
+[blog]: https://developer.okta.com/blog/2022/02/14/faunadb-react-serverless
